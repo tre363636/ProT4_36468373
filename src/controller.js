@@ -6,7 +6,7 @@ class LibrosController {
   async getAll(req, res) {
     try {
       // Ejecutar consulta SQL y esperar por el resultado
-      const result = await pool.query('SELECT * FROM Libros');
+      const [result] = await pool.query('SELECT * FROM Libros');
       // Enviar el resultado como respuesta en formato JSON
       res.json(result);
     } catch (error) {
@@ -14,6 +14,21 @@ class LibrosController {
       res.status(500).json({ error: error.message });
     }
   }
+  async add(req, res) {
+    const { nombre, autor, categoria, año_publicacion, ISBN } = req.body;
+    try {
+        const result = await pool.query(
+            'INSERT INTO Libros(nombre, autor, categoria, año_publicacion, ISBN) VALUES (?, ?, ?, ?, ?)',
+            [nombre, autor, categoria, año_publicacion, ISBN]
+          );
+      res.json({"Id insertado":result[0].insertId}); // Asegúrate de que 'id' sea el nombre correcto de la columna ID en tu tabla
+    } catch (error) {
+        console.error('Error al insertar en la base de datos:', error.message, error.stack);
+        res.status(500).json({ error: error.message });
+      }
+      
+  }
+  
 }
 
 // Exportar una instancia de LibrosController
