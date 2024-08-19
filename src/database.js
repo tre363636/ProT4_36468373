@@ -1,4 +1,4 @@
-import mysqlConnectio from 'mysql2/promise';
+import mysqlConnection from 'mysql2/promise';
 
 const properties = {
     host: 'localhost',
