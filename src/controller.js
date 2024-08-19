@@ -28,6 +28,17 @@ class LibrosController {
       }
       
   }
+  async delete(req, res) {
+    const { id } = req.body;  // Asumiendo que el 'id' viene directamente en el cuerpo de la solicitud
+    try {
+      const result = await pool.query('DELETE FROM Libros WHERE id = ?', [id]);
+      res.json({ "Registros eliminados": result[0].affectedRows});  // 'rowCount' te dará el número de filas afectadas
+    } catch (error) {
+      console.error('Error al eliminar el registro:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+  
   
 }
 
