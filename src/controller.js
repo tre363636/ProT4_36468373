@@ -14,6 +14,18 @@ class LibrosController {
       res.status(500).json({ error: error.message });
     }
   }
+  async getOne(req, res) {
+    try {
+      // Ejecutar consulta SQL y esperar por el resultado
+      const { id } = req.body;  // Asumiendo que el 'id' viene directamente en el cuerpo de la solicitud
+      const [result] = await pool.query('SELECT * FROM Libros WHERE id = ?', [id]);
+      // Enviar el resultado como respuesta en formato JSON
+      res.json(result);
+    } catch (error) {
+      // En caso de error, enviar el error como respuesta
+      res.status(500).json({ error: error.message });
+    }
+  }
   async add(req, res) {
     const { nombre, autor, categoria, año_publicacion, ISBN } = req.body;
     try {
@@ -39,11 +51,11 @@ class LibrosController {
     }
   }
   async update(req, res) {
-    const { nombre, autor, categoria, año_publicacion, ISBN, id } = req.body;  // Asumiendo que el 'id' también viene en el cuerpo de la solicitud
+    const { nombre, autor, categoria, año_publicacion, ISBN } = req.body;  // Asumiendo que el 'id' también viene en el cuerpo de la solicitud
     try {
       const result = await pool.query(
-        'UPDATE Libros SET nombre =(?), autor =(?), categoria =(?), año_publicacion =(?), ISBN =(?) WHERE id =(?)',
-        [nombre, autor, categoria, año_publicacion, ISBN, id]
+        'UPDATE Libros SET nombre =(?), autor =(?), categoria =(?), año_publicacion =(?) WHERE ISBN =(?)',
+        [nombre, autor, categoria, año_publicacion, ISBN]
       );
       res.json({ "Registros actualizados": result[0].changedRows});  // te dirá cuántas filas fueron actualizadas
     } catch (error) {
