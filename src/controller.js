@@ -38,6 +38,20 @@ class LibrosController {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
+  async update(req, res) {
+    const { nombre, autor, categoria, año_publicacion, ISBN, id } = req.body;  // Asumiendo que el 'id' también viene en el cuerpo de la solicitud
+    try {
+      const result = await pool.query(
+        'UPDATE Libros SET nombre =(?), autor =(?), categoria =(?), año_publicacion =(?), ISBN =(?) WHERE id =(?)',
+        [nombre, autor, categoria, año_publicacion, ISBN, id]
+      );
+      res.json({ "Registros actualizados": result[0].changedRows});  // te dirá cuántas filas fueron actualizadas
+    } catch (error) {
+      console.error('Error al actualizar el registro:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+  
   
   
 }
